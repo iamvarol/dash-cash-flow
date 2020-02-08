@@ -20,6 +20,7 @@ EXTERNAL_STYLESHEETS = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 LOGO = "http://www.optimateknoloji.com.tr/images/logo@2x.png"
 MAIN_PAGE = "http://www.optimateknoloji.com.tr/"
 DB_DF = db_util.get_data()
+GLOBAL_DF = preprocessing.preprocess(DB_DF, False)
 TABLE_SELECTED_COLUMNS = [
     'Tarih', 
     'Grup', 
@@ -29,7 +30,6 @@ TABLE_SELECTED_COLUMNS = [
     'HesapAdi',
     ]
 
-GLOBAL_DF = preprocessing.preprocess(DB_DF)
 
 """
 a little bit more preprocessing
@@ -59,7 +59,7 @@ NAVBAR = dbc.Navbar(
                 [
                     dbc.Col(html.Img(id="logo-image", src=LOGO, height="30px")),
                     dbc.Col(
-                        dbc.NavbarBrand("Detaylı Nakit Akışı", className="ml-2")
+                        dbc.NavbarBrand("Detaylı Nakit Akışı", className="ml-2"), align="center",
                     ),
                 ],
                 align="center",
@@ -85,16 +85,15 @@ NAVBAR = dbc.Navbar(
 """
 LEFT_COLUMN = dbc.Jumbotron(
     [
-        html.Label("Select time frame", className="lead"),
-        html.Div(dcc.RangeSlider(id="time-window-slider"), style={"marginTop": 30}),
-        html.Label("Grup tipini seçiniz", style={"marginTop": 50}, className="lead"),
+        html.Label("Zaman Aralığı Seçiniz", className="lead"),
+        html.Div(dcc.RangeSlider(id="time-window-slider"), style={"marginTop": 10}),
+        html.Label("Grup tipini seçiniz", style={"marginTop": 10}, className="lead"),
         dcc.Dropdown(
             id="grup-drop", 
             clearable=False, 
-            style={"marginBottom": 50, "font-size": 12},
+            style={"marginBottom": 10, "font-size": 12},
             multi=True,
-        ),
-        
+        )
     ]
 )
 """
@@ -110,7 +109,7 @@ CARDS_PLOT = [
         [
             dbc.Card(
             [
-                dbc.CardImg(src="http://www.pngmart.com/files/7/Income-PNG-Free-Download.png", top=True,  style={"height":"200px"}),
+                dbc.CardImg(src="http://www.pngmart.com/files/7/Income-PNG-Free-Download.png", top=True,  style={"height":"14rem"}),
                 dbc.CardBody(
                     [
                         html.H6("Gelirler Toplamı", className="card-title"),
@@ -120,9 +119,10 @@ CARDS_PLOT = [
                 ],
             style={"width": "15rem"},
             ),
+            html.Hr(style={"height":"14rem"}),
             dbc.Card(
             [
-                dbc.CardImg(src="https://cdn1.iconfinder.com/data/icons/estate-planning-glyph/64/expense-expenditure-consumption-outgoings-salary-512.png", top=True,  style={"height":"200px"}),
+                dbc.CardImg(src="https://cdn1.iconfinder.com/data/icons/estate-planning-glyph/64/expense-expenditure-consumption-outgoings-salary-512.png", top=True,  style={"height":"14rem"}),
                 dbc.CardBody(
                     [
                         html.H6("Giderler Toplamı", className="card-title"),
@@ -132,30 +132,19 @@ CARDS_PLOT = [
                 ],
             style={"width": "15rem"},
             ),
+            html.Hr(style={"height":"14rem"}),
             dbc.Card(
             [
-                dbc.CardImg(src="https://cdn.onlinewebfonts.com/svg/img_457131.png", top=True,  style={"height":"200px"}),
+                dbc.CardImg(src="https://cdn.onlinewebfonts.com/svg/img_457131.png", top=True,  style={"height":"14rem"}),
                 dbc.CardBody(
                     [
-                        html.H6("Kazanç", className="card-title"),
+                        html.H6("Ciro", className="card-title"),
                         html.H4(id="ciroText", className="card-text",style={"color": "green"}),
                         ]
                     ),
                 ],
             style={"width": "15rem"},
             ),
-            # dbc.Card(
-            # [
-            #     dbc.CardImg(src="https://pngimage.net/wp-content/uploads/2018/06/money-transfer-png-7.png", top=True,  style={"height":"200px"}),
-            #     dbc.CardBody(
-            #         [
-            #             html.H6("Toplam İşlem", className="card-title"),
-            #             html.H4(id="islemlerText", className="card-text",style={"color": "blue"}),
-            #             ]
-            #         ),
-            #     ],
-            # style={"width": "15rem"},
-            # ),
         ]
     ),
 ]
@@ -175,6 +164,20 @@ TABLE = dash_table.DataTable(
         columns=[{"name": i, "id": i} for i in TABLE_SELECTED_COLUMNS],
         data=GLOBAL_DF.to_dict('records'),
         style_cell={'textAlign': 'left'},
+        style_cell_conditional=[{'if': {'column_id': c},  
+                                 'backgroundColor': '#EAFAF1'} for c in ['Tarih',]]
+                    + [{'if': {'column_id': c}, 
+                        'backgroundColor': '#FEF9E7'} for c in ['Grup', ]]
+                    + [{'if': {'column_id': c}, 
+                        'backgroundColor': '#EBF5FB'} for c in ['Tutar', ]]
+                    + [{'if': {'column_id': c}, 
+                        'backgroundColor': '#F4ECF7'} for c in ['Islem Tipi', ]]
+                    + [{'if': {'column_id': c}, 
+                        'backgroundColor': '#FDEDEC'} for c in ['Aciklama1', ]]
+                    + [{'if': {'column_id': c}, 
+                        'backgroundColor': '#F6DDCC'} for c in ['HesapAdi', ]],
+
+        
         # style_cell_conditional=[
         #     {
         #         "if": {"column_id": "Text"},
@@ -184,13 +187,21 @@ TABLE = dash_table.DataTable(
         #         "min-width": "50%",
         #         }
         #     ],
-        style_data_conditional=[
-            {
-            'if': {'row_index': 'odd'},
-            'backgroundColor': '#75CAEB',
-            'color': 'yellow'
-            },
-        ],
+        style_data_conditional=[{'if': {'row_index': 'odd'}, 
+                                 'backgroundColor': '#D5DBDB'}]
+                    + [{'if': {'column_id': c, 
+                               'row_index': 'odd'}, 'backgroundColor': '#D5F5E3'} for c in ['Tarih',]]
+                    + [{'if': {'column_id': c, 
+                               'row_index': 'odd'}, 'backgroundColor': '#FCF3CF'} for c in ['Grup', ]]
+                    + [{'if': {'column_id': c, 
+                               'row_index': 'odd'}, 'backgroundColor': '#D6EAF8'} for c in ['Tutar',]]
+                    + [{'if': {'column_id': c, 
+                               'row_index': 'odd'}, 'backgroundColor': '#E8DAEF'} for c in ['Islem Tipi', ]]
+                    + [{'if': {'column_id': c, 
+                               'row_index': 'odd'}, 'backgroundColor': '#FADBD8'} for c in ['Aciklama1',]]
+                    + [{'if': {'column_id': c, 
+                               'row_index': 'odd'}, 'backgroundColor': '#E59866'} for c in ['HesapAdi',]],
+                        
         # style_cell={
         #     "padding": "16px",
         #     "whiteSpace": "normal",
@@ -198,12 +209,12 @@ TABLE = dash_table.DataTable(
         #     "max-width": "0",
         #     },
         style_header={
-        'backgroundColor': '#033C73',
+        # 'backgroundColor': '#0357a8',
         'fontWeight': 'bold',
-        'color': 'white'
+        # 'color': 'white'
         },
         # style_data={"whiteSpace": "normal", "height": "auto"},
-        editable=True,
+        editable=False,
         filter_action="native",
         sort_action="native",
         sort_mode="multi",
@@ -247,7 +258,7 @@ TABLE_PLOTS = [
 """
 GRUPS_PLOT = [
     
-    dbc.CardHeader(html.H5("İşlem Sayılarının Dağılımı")),
+    dbc.CardHeader(html.H5("Tahsilat ve Ödeme İşlemleri")),
     dbc.CardBody(
         [
             dcc.Loading(
@@ -321,11 +332,11 @@ BODY = dbc.Container(
     [
         dbc.Row(
             [
-                dbc.Col(LEFT_COLUMN, md=4, align="center"),
-                dbc.Col(CARDS_PLOT, md=8,),
+                dbc.Col(LEFT_COLUMN, md=4, align="center",),
+                dbc.Col(CARDS_PLOT, md=8,align="center"),
                 # dbc.Col(dbc.Card(GRUPS_PLOT), md=8),
             ],
-            style={"marginTop": 20},
+            style={"marginTop": 20, "height":"20rem"},
         ),
         # dbc.Card(ISLEM_HISTOGRAM_PLOT),
         dbc.Row([dbc.Col([dbc.Card(ISLEM_HISTOGRAM_PLOT)])], style={"marginTop": 50}),
@@ -474,32 +485,28 @@ def update_texts(time_values, grup):
         
         df = pd.DataFrame(filtered_df.groupby(["Islem Tipi"]).sum().reset_index())
         
+        print(df)
         # print('After group by')
         # print(df.head())
         # print(df.tail())
         
-        gelirlerToplami = df.iat[0,1]
-        gelirlerToplami = '{:,.2f}'.format(gelirlerToplami)
-        
-        giderlerToplami = df.iat[1,1]
-        giderlerToplami = '{:,.2f}'.format(giderlerToplami)
-         
-        ciro  = df.iat[0,1] + df.iat[1,1]
+        if df.size > 2 :
+            if df.iat[0,0] == "Tahsilat":
+                gelirlerToplami = ciro_gel = df.iat[0,1]
+                gelirlerToplami = '{:,.2f}'.format(gelirlerToplami)
+        else:
+            gelirlerToplami = ciro_gel = 0
+            
+        if df.size > 2 :
+            if df.iat[1,0]=="Ödeme":
+                giderlerToplami = ciro_gid = df.iat[1,1]
+                giderlerToplami = '{:,.2f}'.format(giderlerToplami)
+        else:
+            giderlerToplami = ciro_gid = 0
+            
+        ciro  = ciro_gel + ciro_gid
         ciro = '{:,.0f}'.format(ciro)
         
-        # if fark<0:
-        #     color = "red"
-        # else:
-        #     color = "green"
-        # style={"color": color}
-        
-        
-        # islemlerToplami  = len(filtered_df.index)
-        # islemlerToplami = '{:,.0f}'.format(islemlerToplami)
-        
-        # print(gelirlerToplami)
-        # print(giderlerToplami)
-        # print(islemlerToplami)
         result = gelirlerToplami, giderlerToplami, ciro
     else:
         result = "no result", "no result", "no result"
@@ -526,18 +533,18 @@ def update_islem_tutar_histogram(time_values):
 @APP.callback(
     Output("heatmap", "figure"),
     [
-        Input("time-window-slider", "value"),
+        # Input("time-window-slider", "value"),
         Input("selector", "value"),
     ],
 )
-def update_heatmap(time_values, selector_value):
+def update_heatmap(selector_value):
     #print("\t time values first heatmap : type ", type(time_values))
-    if time_values is not None:
+    # if time_values is not None:
     # Return to original hm(no colored annotation) by resetting
-        min_date, max_date = helper_functions.time_slider_to_date(time_values)
-        return helper_functions.generate_heatmap(min_date, max_date, GLOBAL_DF, selector_value)
+        # min_date, max_date = helper_functions.time_slider_to_date(time_values)
+    return helper_functions.generate_heatmap(GLOBAL_DF, selector_value)
 
-    return {"data":[]}
+    # return {"data":[]}
 
 # @APP.callback(
 #     Output("grup-drop", "value"), 

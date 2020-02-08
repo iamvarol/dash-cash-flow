@@ -145,16 +145,17 @@ def generate_islem_tipi_histogram(start_date, end_date, dataframe):
 
 
 
-def generate_heatmap(start_date, end_date, dataframe, selector):
+def generate_heatmap(dataframe, selector):
 # def generate_heatmap(start_date, end_date, selector, segment, kategori):
     """
     :param: start: start date from selection.
     :param: end: end date from selection.
     """
 
-    filtered_df = dataframe.sort_values("timestamp").set_index("timestamp")[
-        start_date:end_date
-    ]
+    filtered_df = dataframe.sort_values("timestamp").set_index("timestamp")
+    # [
+    #     start_date:end_date
+    # ]
     
     ciro_df = pd.DataFrame(filtered_df.groupby(["Yil", "Ay"]).sum().reset_index())
     group_df = pd.DataFrame(

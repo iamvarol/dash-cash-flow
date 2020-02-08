@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-def preprocess(dataframe):
+def preprocess(dataframe, export_status):
     
     # drop unnecessary columns
     dataframe.drop(['Firma', 'Donem', 'GelirGider', 'Yil', 'AyNo', 'Hafta'], axis=1, inplace=True)
@@ -32,7 +32,8 @@ def preprocess(dataframe):
     dataframe['Islem Tipi'] = ['Tahsilat' if x > 0 else 'Ödeme' for x in dataframe['Tutar']]
     #df['color'] = ['red' if x == 'Z' else 'green' for x in df['Set']]
     
-    export_csv = df.to_csv ('data/gimas_db.csv', index = None, header=True)
+    if export_status:
+        export_csv = dataframe.to_csv (f'data/gimas_db.zip', index = None, header=True)
     # print(dataframe.head())
     # print(dataframe.tail())
     
