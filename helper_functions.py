@@ -57,9 +57,9 @@ def time_slider_to_date(time_values):
     """ TODO """
     min_date = datetime.fromtimestamp(time_values[0]).strftime("%c")
     max_date = datetime.fromtimestamp(time_values[1]).strftime("%c")
-    print("Converted time_values: ")
-    print("\tmin_date:", time_values[0], "to: ", min_date)
-    print("\tmax_date:", time_values[1], "to: ", max_date)
+    # print("Converted time_values: ")
+    # print("\tmin_date:", time_values[0], "to: ", min_date)
+    # print("\tmax_date:", time_values[1], "to: ", max_date)
     return [min_date, max_date]
 
 
@@ -82,10 +82,10 @@ def make_options_grup_drop(values):
 
 def calculate_grup_sample_data(dataframe, sample_size, time_values):
     """ TODO """
-    print(
-        "making bank_sample_data with sample_size count: %s and time_values: %s"
-        % (sample_size, time_values)
-    )
+    # print(
+    #     "making bank_sample_data with sample_size count: %s and time_values: %s"
+    #     % (sample_size, time_values)
+    # )
     if time_values is not None:
         min_date = time_values[0]
         max_date = time_values[1]
@@ -156,13 +156,20 @@ def generate_heatmap(start_date, end_date, dataframe, selector):
         start_date:end_date
     ]
     
-    fark_df = pd.DataFrame(filtered_df.groupby(["Yil", "Ay"]).sum().reset_index())
-    group_df = pd.DataFrame(filtered_df.groupby(["Yil", "Ay", "Islem Tipi"]).sum().reset_index())
-    print("fark df :")
-    print(fark_df)
-    print("group df :")
-    print(group_df.head(34))
-    print(group_df.tail(34))
+    ciro_df = pd.DataFrame(filtered_df.groupby(["Yil", "Ay"]).sum().reset_index())
+    group_df = pd.DataFrame(
+        filtered_df.groupby(
+            ["Yil", "Ay", "Islem Tipi"]
+            ).sum().reset_index()
+        )  # yıl ay bazında tahsilat ve ödeme toplamları
+    
+    
+    
+    # print("ciro df :")
+    # print(ciro_df)
+    # print("group df :")
+    # print(group_df.head(34))
+    # print(group_df.tail(34))
     # filtered_df = filtered_df[filtered_df["Segment"].isin(segment)& filtered_df["Kategori"].isin(kategori)]
     
     x_axis = []
@@ -175,12 +182,12 @@ def generate_heatmap(start_date, end_date, dataframe, selector):
     month = ""
     year = ""
     
-    if selector == "fark":
-        hovertemplate = "<b> %{y}  %{x} <br><br> %{z} TL Tahsilat-Ödeme Farkı"
+    if selector == "ciro":
+        hovertemplate = "<b> %{y}  %{x} <br><br> %{z} TL Ciro"
         # record = "Tutar"
-        title="Fark"
+        title="Ciro"
     elif selector == "tahsilat":
-        hovertemplate = "<b> %{y}  %{x} <br><br> %{z} TL tahsilat"
+        hovertemplate = "<b> %{y}  %{x} <br><br> %{z} TL Tahsilat"
         # record = "Tutar"
         # record = group_df[group_df["Islem Tipi"]=="Tahsilat"]["Tutar"]
         title="Tahsilat Miktarı"
@@ -195,16 +202,16 @@ def generate_heatmap(start_date, end_date, dataframe, selector):
     annotations = []
 
     for ind_y, yil in enumerate(y_axis):
-        if selector == "fark":
-            filtered_yil = fark_df[fark_df["Yil"] == yil]
+        if selector == "ciro":
+            filtered_yil = ciro_df[ciro_df["Yil"] == yil]
         else:
             filtered_yil = group_df[group_df["Yil"] == yil]
 
-        print(enumerate(x_axis))
+        # print(enumerate(x_axis))
         for ind_x, x_val in enumerate(x_axis):
             # print(ind_x)
             # print(x_val)
-            if selector == "fark":
+            if selector == "ciro":
                 sum_of_record = filtered_yil[filtered_yil["Ay"] == x_val]["Tutar"]
             elif selector == "tahsilat":
                 sum_of_record = filtered_yil[(filtered_yil["Ay"] == x_val)& (filtered_yil["Islem Tipi"]=="Tahsilat")]["Tutar"]
@@ -229,7 +236,7 @@ def generate_heatmap(start_date, end_date, dataframe, selector):
                 y=yil,
                 font=dict(family="sans-serif"),
             )
-            print(annotation_dict)
+            # print(annotation_dict)
 
             annotations.append(annotation_dict)
 

@@ -18,7 +18,7 @@ def preprocess(dataframe):
     # dataframe = dataframe.sort_values("Tarih").set_index("Tarih")
     dataframe.sort_values(by=['Tarih'], inplace=True, ascending=False)
     
-    print('after sort :\n', dataframe.dtypes)
+    # print('after sort :\n', dataframe.dtypes)
     
     # dataframe.drop(['timestamp'], axis=1, inplace=True)
     # dataframe['A'] = dataframe.apply(lambda x: x['B'] if x['A']==0 else x['A'], axis=1)
@@ -32,12 +32,9 @@ def preprocess(dataframe):
     dataframe['Islem Tipi'] = ['Tahsilat' if x > 0 else 'Ödeme' for x in dataframe['Tutar']]
     #df['color'] = ['red' if x == 'Z' else 'green' for x in df['Set']]
     
-    
-    
-    
-    
-    print(dataframe.head())
-    print(dataframe.tail())
+    export_csv = df.to_csv ('data/gimas_db.csv', index = None, header=True)
+    # print(dataframe.head())
+    # print(dataframe.tail())
     
     return dataframe
 

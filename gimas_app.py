@@ -20,7 +20,14 @@ EXTERNAL_STYLESHEETS = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 LOGO = "http://www.optimateknoloji.com.tr/images/logo@2x.png"
 MAIN_PAGE = "http://www.optimateknoloji.com.tr/"
 DB_DF = db_util.get_data()
-TABLE_SELECTED_COLUMNS = ['Tarih', 'Grup', 'Tutar', 'Islem Tipi', 'Aciklama1', 'HesapAdi']
+TABLE_SELECTED_COLUMNS = [
+    'Tarih', 
+    'Grup', 
+    'Tutar', 
+    'Islem Tipi', 
+    'Aciklama1', 
+    'HesapAdi',
+    ]
 
 GLOBAL_DF = preprocessing.preprocess(DB_DF)
 
@@ -96,9 +103,71 @@ LEFT_COLUMN = dbc.Jumbotron(
 
 
 """
-# TABLE
+# CARDS_PLOT
+"""
+CARDS_PLOT = [
+    dbc.Row(
+        [
+            dbc.Card(
+            [
+                dbc.CardImg(src="http://www.pngmart.com/files/7/Income-PNG-Free-Download.png", top=True,  style={"height":"200px"}),
+                dbc.CardBody(
+                    [
+                        html.H6("Gelirler Toplamı", className="card-title"),
+                        html.H4(id="gelirlerText", className="card-text",style={"color": "green"}),
+                        ]
+                    ),
+                ],
+            style={"width": "15rem"},
+            ),
+            dbc.Card(
+            [
+                dbc.CardImg(src="https://cdn1.iconfinder.com/data/icons/estate-planning-glyph/64/expense-expenditure-consumption-outgoings-salary-512.png", top=True,  style={"height":"200px"}),
+                dbc.CardBody(
+                    [
+                        html.H6("Giderler Toplamı", className="card-title"),
+                        html.H4(id="giderlerText", className="card-text",style={"color": "red"}),
+                        ]
+                    ),
+                ],
+            style={"width": "15rem"},
+            ),
+            dbc.Card(
+            [
+                dbc.CardImg(src="https://cdn.onlinewebfonts.com/svg/img_457131.png", top=True,  style={"height":"200px"}),
+                dbc.CardBody(
+                    [
+                        html.H6("Kazanç", className="card-title"),
+                        html.H4(id="ciroText", className="card-text",style={"color": "green"}),
+                        ]
+                    ),
+                ],
+            style={"width": "15rem"},
+            ),
+            # dbc.Card(
+            # [
+            #     dbc.CardImg(src="https://pngimage.net/wp-content/uploads/2018/06/money-transfer-png-7.png", top=True,  style={"height":"200px"}),
+            #     dbc.CardBody(
+            #         [
+            #             html.H6("Toplam İşlem", className="card-title"),
+            #             html.H4(id="islemlerText", className="card-text",style={"color": "blue"}),
+            #             ]
+            #         ),
+            #     ],
+            # style={"width": "15rem"},
+            # ),
+        ]
+    ),
+]
+
+"""
+# CARDS_PLOT
 """
 
+
+"""
+# TABLE
+"""
 # https://dash.plot.ly/datatable/interactivity
 # to select columns to show
 TABLE = dash_table.DataTable(
@@ -171,57 +240,6 @@ TABLE_PLOTS = [
 """
 # TABLE_PLOTS
 """
-"""
-# CARDS_PLOT
-"""
-CARDS_PLOT = [
-    dbc.Row(
-        [
-            dbc.Card(
-            [
-                dbc.CardImg(src="http://www.pngmart.com/files/7/Income-PNG-Free-Download.png", top=True,  style={"height":"200px"}),
-                dbc.CardBody(
-                    [
-                        html.H6("Gelirler Toplamı", className="card-title"),
-                        html.H4(id="gelirlerText", className="card-text",style={"color": "green"}),
-                        ]
-                    ),
-                ],
-            style={"width": "15rem"},
-            ),
-            dbc.Card(
-            [
-                dbc.CardImg(src="https://cdn1.iconfinder.com/data/icons/estate-planning-glyph/64/expense-expenditure-consumption-outgoings-salary-512.png", top=True,  style={"height":"200px"}),
-                dbc.CardBody(
-                    [
-                        html.H6("Giderler Toplamı", className="card-title"),
-                        html.H4(id="giderlerText", className="card-text",style={"color": "red"}),
-                        ]
-                    ),
-                ],
-            style={"width": "15rem"},
-            ),
-            dbc.Card(
-            [
-                dbc.CardImg(src="https://pngimage.net/wp-content/uploads/2018/06/money-transfer-png-7.png", top=True,  style={"height":"200px"}),
-                dbc.CardBody(
-                    [
-                        html.H6("Toplam İşlem", className="card-title"),
-                        html.H4(id="islemlerText", className="card-text",style={"color": "blue"}),
-                        ]
-                    ),
-                ],
-            style={"width": "15rem"},
-            ),
-        ]
-    )
-]
-
-"""
-# CARDS_PLOT
-"""
-
-
 
 
 """
@@ -249,7 +267,7 @@ GRUPS_PLOT = [
 """
 ISLEM_HISTOGRAM_PLOT = [
     
-    dbc.CardHeader(html.H5("İşlem Tipine Göre Aylık Tutarlar Toplamı")),
+    dbc.CardHeader(html.H5("Haftalık Finansal Durum")),
     dbc.CardBody(
         [
             dcc.Loading(
@@ -269,7 +287,7 @@ ISLEM_HISTOGRAM_PLOT = [
 """
 HEATMAP_PLOT = [
     
-    dbc.CardHeader(html.H5("İşlem Tipine Göre Gün-Ay Bazında Toplamlar")),
+    dbc.CardHeader(html.H5("Yıl-Ay Finansal Durum")),
     dbc.CardBody(
         [
             dcc.Loading(
@@ -277,11 +295,11 @@ HEATMAP_PLOT = [
                 children=[dcc.RadioItems(
                             id="selector",
                             options=[
-                                {"label": "Fark", "value": "fark"},
+                                {"label": "Ciro", "value": "ciro"},
                                 {"label": "Tahsilat", "value": "tahsilat"},
                                 {"label": "Ödeme", "value": "odeme"},
                             ],
-                            value="fark",
+                            value="ciro",
                             labelStyle={"display": "inline-block"},
                             ),
                           html.Br(),
@@ -309,16 +327,14 @@ BODY = dbc.Container(
             ],
             style={"marginTop": 20},
         ),
-        dbc.Row([dbc.Col([dbc.Card(TABLE_PLOTS)])], style={"marginTop": 50}),
-        html.Hr(),
         # dbc.Card(ISLEM_HISTOGRAM_PLOT),
         dbc.Row([dbc.Col([dbc.Card(ISLEM_HISTOGRAM_PLOT)])], style={"marginTop": 50}),
         html.Hr(),
         dbc.Row([dbc.Col([dbc.Card(HEATMAP_PLOT)])], style={"marginTop": 50}),
         html.Hr(),
-        # dbc.Card(GRUPS_PLOT),
+        dbc.Row([dbc.Col([dbc.Card(TABLE_PLOTS)])], style={"marginTop": 50}),
+        html.Hr(),
         dbc.Row([dbc.Col([dbc.Card(GRUPS_PLOT)])], style={"marginTop": 50}),
-        # dbc.Card(WORDCLOUD_PLOTS),
     ],
     className="mt-12",
 )
@@ -437,7 +453,8 @@ def update_grup_sample_plot(time_values):
     [
         Output("gelirlerText", "children"),
         Output("giderlerText", "children"),
-        Output("islemlerText", "children"),
+        Output("ciroText", "children"),
+        # Output("farkText", "style"),
     ],
     [
         Input("time-window-slider", "value"),
@@ -467,13 +484,23 @@ def update_texts(time_values, grup):
         giderlerToplami = df.iat[1,1]
         giderlerToplami = '{:,.2f}'.format(giderlerToplami)
          
-        islemlerToplami  = len(filtered_df.index)
-        islemlerToplami = '{:,.0f}'.format(islemlerToplami)
+        ciro  = df.iat[0,1] + df.iat[1,1]
+        ciro = '{:,.0f}'.format(ciro)
+        
+        # if fark<0:
+        #     color = "red"
+        # else:
+        #     color = "green"
+        # style={"color": color}
+        
+        
+        # islemlerToplami  = len(filtered_df.index)
+        # islemlerToplami = '{:,.0f}'.format(islemlerToplami)
         
         # print(gelirlerToplami)
         # print(giderlerToplami)
         # print(islemlerToplami)
-        result = gelirlerToplami, giderlerToplami, islemlerToplami
+        result = gelirlerToplami, giderlerToplami, ciro
     else:
         result = "no result", "no result", "no result"
 
