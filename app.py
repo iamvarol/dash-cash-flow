@@ -357,9 +357,9 @@ BODY = dbc.Container(
 
 
 
-SERVER = flask.Flask(__name__)
-APP = dash.Dash(__name__, external_stylesheets=[dbc.themes.CERULEAN], server=SERVER)
-APP.layout = html.Div(children=[NAVBAR, BODY])
+server = flask.Flask(__name__)
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CERULEAN], server=server)
+app.layout = html.Div(children=[NAVBAR, BODY])
 
 
 
@@ -377,7 +377,7 @@ APP.layout = html.Div(children=[NAVBAR, BODY])
 
 
 
-@APP.callback(
+@app.callback(
     [
         Output("time-window-slider", "marks"),
         Output("time-window-slider", "min"),
@@ -410,7 +410,7 @@ def populate_time_slider(src):
 
 
 
-@APP.callback(
+@app.callback(
     [Output("grup-drop", "options"),
      Output("grup-drop", "value")],
     [Input("time-window-slider", "value")],
@@ -425,7 +425,7 @@ def populate_grup_dropdown(time_values):
     return helper_functions.make_options_grup_drop(grup_names), grup_names
 
 
-@APP.callback(
+@app.callback(
     Output("grup-sample", "figure"),
     [Input("time-window-slider", "value")],
     )
@@ -459,7 +459,7 @@ def update_grup_sample_plot(time_values):
     # print("redrawing grup-sample...done")
     return {"data": data, "layout": layout}
 
-@APP.callback(
+@app.callback(
     [
         Output("gelirlerText", "children"),
         Output("giderlerText", "children"),
@@ -512,7 +512,7 @@ def update_texts(time_values, grup):
 
     return result
 
-@APP.callback(
+@app.callback(
     Output("islem-tutar-hist", "figure"),
     [
         Input("time-window-slider", "value"),
@@ -529,7 +529,7 @@ def update_islem_tutar_histogram(time_values):
 
     return {"data":[]}
 
-@APP.callback(
+@app.callback(
     Output("heatmap", "figure"),
     [
         # Input("time-window-slider", "value"),
@@ -545,7 +545,7 @@ def update_heatmap(selector_value):
 
     # return {"data":[]}
 
-# @APP.callback(
+# @app.callback(
 #     Output("grup-drop", "value"), 
 #     [Input("grup-sample", "clickData")],
 #     )
@@ -556,7 +556,7 @@ def update_heatmap(selector_value):
 #         return selected_grup
 #     return grup_list
 
-# @APP.callback(
+# @app.callback(
 #     [
 #         Output("table", "data"),
 #         Output("table", "columns"),
@@ -591,7 +591,7 @@ def update_heatmap(selector_value):
 #     return result
     
 
-# @APP.callback(
+# @app.callback(
 #     Output('datatable', 'style_data_conditional'),
 #     [Input('datatable', 'selected_columns')]
 # )
@@ -603,4 +603,4 @@ def update_heatmap(selector_value):
 
 
 if __name__ == "__main__":
-    APP.run_server(debug=True)
+    app.run_server(debug=True)
