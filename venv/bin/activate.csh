@@ -8,7 +8,7 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV "/Users/mrdrk/development/playground/optima/app-gimas-dash-nakit-akisi/venv"
+setenv VIRTUAL_ENV "/Users/mrdrk/deployments/dash-apps/app-dash-cash-flow/venv"
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/bin:$PATH"

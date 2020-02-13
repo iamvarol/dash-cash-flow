@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/Users/mrdrk/development/playground/optima/app-gimas-dash-nakit-akisi/venv"
+set -gx VIRTUAL_ENV "/Users/mrdrk/deployments/dash-apps/app-dash-cash-flow/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/mrdrk/development/playground/optima/app-gimas-dash-nakit-akisi/venv"
+VIRTUAL_ENV="/Users/mrdrk/deployments/dash-apps/app-dash-cash-flow/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

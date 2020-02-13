@@ -8,10 +8,10 @@ def preprocess(dataframe, export_status):
     dataframe.drop(['Firma', 'Donem', 'GelirGider', 'Yil', 'AyNo', 'Hafta'], axis=1, inplace=True)
     
     dataframe['Tarih'] = dataframe['Vade']
-    dataframe['Tarih'] = dataframe.apply(lambda x: x['Aciklama1'] if ((x['Grup']=='Banka')|(x['Grup']=='Kasa'))  else x['Tarih'], axis=1)
+    dataframe['Tarih'] = dataframe.apply(lambda x: x['Aciklama'] if ((x['Grup']=='Banka')|(x['Grup']=='Kasa'))  else x['Tarih'], axis=1)
     dataframe['Tarih']= pd.to_datetime(dataframe['Tarih']) 
    
-    print('before sort :\n', dataframe.dtypes)
+    # print('before sort :\n', dataframe.dtypes)
     dataframe['timestamp'] = dataframe['Tarih'] # .copy(deep=True) # generate timestamp for the time-window-slider and other graphs
     dataframe['Tarih'] = dataframe['Tarih'].dt.date
     
@@ -33,7 +33,7 @@ def preprocess(dataframe, export_status):
     #df['color'] = ['red' if x == 'Z' else 'green' for x in df['Set']]
     
     if export_status:
-        export_csv = dataframe.to_csv (f'data/gimas_db.zip', index = None, header=True)
+        export_csv = dataframe.to_csv (f'data/cash_data.csv', index = None, header=True)
     # print(dataframe.head())
     # print(dataframe.tail())
     

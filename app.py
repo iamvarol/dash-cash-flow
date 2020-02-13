@@ -12,21 +12,20 @@ import pandas as pd
 import numpy as np
 from dash.dependencies import Output, Input, State
 from dateutil import relativedelta
-import db_util
 import helper_functions
 import preprocessing
 
 EXTERNAL_STYLESHEETS = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
-LOGO = "http://www.optimateknoloji.com.tr/images/logo@2x.png"
-MAIN_PAGE = "http://www.optimateknoloji.com.tr/"
-DB_DF = db_util.get_data()
+LOGO = "https://avatars0.githubusercontent.com/u/55491416?s=460&v=4"
+MAIN_PAGE = "https://github.com/iamvarol"
+DB_DF = pd.read_csv('data/cash_data.csv')
 GLOBAL_DF = preprocessing.preprocess(DB_DF, False)
 TABLE_SELECTED_COLUMNS = [
     'Tarih', 
     'Grup', 
     'Tutar', 
     'Islem Tipi', 
-    'Aciklama1', 
+    'Aciklama', 
     'HesapAdi',
     ]
 
@@ -235,13 +234,13 @@ TABLE = dash_table.DataTable(
 # TABLE_PLOTS
 """
 TABLE_PLOTS = [
-    dbc.CardHeader(html.H5("İşlemlerin Tablo Gösterimi")),
+    dbc.CardHeader(html.H5("Nakit Akışı Tablosu")),
     dbc.CardBody(
         [
-            # html.P(
-            #     "Tablo Gösterimi",
-            #     className="mb-0",
-            # ),
+            html.P(
+                "'filter data...' yazan bölüme sorgu yazılabilir",
+                className="mb-0",
+            ),
             TABLE,  
             # LDA_PLOT,
             # html.Hr(),
@@ -485,7 +484,7 @@ def update_texts(time_values, grup):
         
         df = pd.DataFrame(filtered_df.groupby(["Islem Tipi"]).sum().reset_index())
         
-        print(df)
+        # print(df)
         # print('After group by')
         # print(df.head())
         # print(df.tail())
